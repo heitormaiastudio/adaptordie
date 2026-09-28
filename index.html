@@ -161,6 +161,19 @@ h2{font-size:clamp(1.8rem,4vw,3rem);margin-bottom:12px}
 .bonus-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(230,200,92,.18)}
 .bonus-hint{margin:9px 0 14px;color:var(--muted);font-size:.86rem}
 
+
+.explanation-card{
+  margin:20px auto 0; max-width:900px; padding:20px 24px;
+  border-radius:18px; background:rgba(255,255,255,.96); color:#17201c;
+  text-align:left; box-shadow:0 12px 35px rgba(0,0,0,.28);
+}
+.explanation-label{
+  color:#6f5b10; font-size:.82rem; font-weight:1000;
+  letter-spacing:.12em; text-transform:uppercase; margin-bottom:8px;
+}
+.explanation-answer{font-size:1.35rem;font-weight:1000;margin-bottom:10px}
+.explanation-text{font-size:1.05rem;line-height:1.5;font-weight:700}
+
 </style>
 </head>
 <body>
@@ -317,6 +330,22 @@ const Q = {
 };
 function q(title,text,answer,distractors,bg){return{title,text,answer,distractors,bg}}
 
+
+const EXPLANATIONS = {
+ gecko:"A master of disguise with a tail that perfectly mimics a dead, decaying leaf, complete with faux water droplets and insect holes to blend into Madagascar forests.",
+ shoebill:"A giant bird featuring a massive, shoe-shaped bill with a sharp hook at the end, specially adapted for catching lungfish, baby crocodiles, and eels in muddy swamps.",
+ tapir:"A large mammal with an unusual black-and-white color block pattern that looks like a boulder in the dark rainforest shadows, breaking up its body outline to confuse predators.",
+ thorny:"A desert lizard covered in sharp spikes to deter predators, with a system of microscopic grooves in its skin that pulls morning dew straight into its mouth using capillary action.",
+ lyrebird:"A rainforest bird capable of mimicking almost any sound it hears—from other bird calls to chainsaws and camera shutters—using this complex vocal behavior to attract mates and defend territory.",
+ opossum:"A mammal that “plays dead” by going completely limp, dropping its heart rate, and emitting a foul smell when threatened, tricking predators into thinking it is rotten food.",
+ archerfish:"A clever fish that calculates the refraction of light through water to shoot precise water droplets like a water pistol, knocking land insects off overhanging branches into the river.",
+ shrimp:"A tiny crustacean that snaps its oversized claw shut so rapidly it creates a high-pressure bubble wave that collapses with a loud “bang,” stunning prey from a distance.",
+ frog:"An incredible amphibian that can survive the winter by freezing solid, stopping its heart and breathing completely while high glucose levels protect its organs from damage.",
+ loris:"The only venomous primate, which mixes oil from a gland on its arm with its saliva to create a toxic bite used for defense against predators and parasites.",
+ hatchet:"A tiny fish equipped with photophores on its belly that produce light matching the faint sunlight filtering down from above, making it invisible to predators swimming below it.",
+ hagfish:"A jawless sea creature that releases a massive amount of chemical slime when attacked, which reacts with seawater to expand instantly and suffocate the gills of predatory fish."
+};
+
 const B = {
  gecko:"My tail looks like a dead, decaying leaf, complete with fake water droplets and insect holes. Who am I?",
  shoebill:"My massive, shoe-shaped bill has a sharp hook that helps me catch prey in muddy swamps. Who am I?",
@@ -441,7 +470,14 @@ function answer(btn,key,item){
    }
 
    $("feedback").className="feedback good";
-   $("feedback").innerHTML=`✓ SURVIVED! &nbsp; +100 <small>Streak: ${streak}${bonusPending ? " — BONUS UNLOCKED!" : ""}</small>`;
+   $("feedback").innerHTML=`
+     ✓ SURVIVED! &nbsp; +100
+     <small>Streak: ${streak}${bonusPending ? " — BONUS UNLOCKED!" : ""}</small>
+     <div class="explanation-card">
+       <div class="explanation-label">Explanation</div>
+       <div class="explanation-answer">${A[item.answer].name}</div>
+       <div class="explanation-text">${EXPLANATIONS[item.answer]}</div>
+     </div>`;
  }else{
    lives--;
    streak=0;
@@ -450,7 +486,14 @@ function answer(btn,key,item){
    const right=[...document.querySelectorAll(".option")].find(b=>b.dataset.key===item.answer);
    if(right)right.classList.add("correct");
    $("feedback").className="feedback bad";
-   $("feedback").innerHTML=`✕ WRONG ADAPTATION <small>The correct choice was ${A[item.answer].name}.</small>`;
+   $("feedback").innerHTML=`
+     ✕ WRONG ADAPTATION
+     <small>The correct choice was ${A[item.answer].name}.</small>
+     <div class="explanation-card">
+       <div class="explanation-label">Explanation</div>
+       <div class="explanation-answer">${A[item.answer].name}</div>
+       <div class="explanation-text">${EXPLANATIONS[item.answer]}</div>
+     </div>`;
  }
 
  renderHUD();
